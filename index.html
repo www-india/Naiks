@@ -356,28 +356,10 @@ nav.scrolled{box-shadow:var(--shadow);}
   transition:width linear;
 }
 
-/* Scroll indicator */
-.hero-scroll{
-  position:absolute;
-  bottom:32px;
-  left:50%;
-  transform:translateX(-50%);
-  z-index:4;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:8px;
-  color:rgba(255,255,255,.4);
-  font-size:10px;
-  letter-spacing:.2em;
-  text-transform:uppercase;
+/* Slide navigation dots - hidden */
+.hero-nav{
+  display:none;
 }
-.scroll-line{
-  width:1px;height:40px;
-  background:linear-gradient(to bottom,var(--gold),transparent);
-  animation:scrollPulse 2s ease-in-out infinite;
-}
-@keyframes scrollPulse{0%,100%{transform:scaleY(1);opacity:1}50%{transform:scaleY(.6);opacity:.4}}
 
 /* Particle canvas */
 #heroParticles{
@@ -417,38 +399,210 @@ nav.scrolled{box-shadow:var(--shadow);}
 /* ── ABOUT / DOCTORS ── */
 .about-section{background:var(--off-white);}
 .doctors-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;}
-.doctor-card{background:var(--white);border:1px solid var(--border);padding:48px 40px;position:relative;overflow:hidden;transition:box-shadow .3s;}
-.doctor-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--red);}
-.doctor-card:hover{box-shadow:var(--shadow-lg);}
-.doctor-avatar{width:88px;height:88px;border-radius:50%;background:var(--cream);display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:28px;border:2px solid var(--border);}
-.doctor-name{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:500;color:var(--charcoal);margin-bottom:6px;}
-.doctor-creds{font-size:13px;color:var(--red);font-weight:600;letter-spacing:.04em;margin-bottom:20px;}
-.doctor-reg{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:20px;}
-.doctor-bio{font-size:15px;line-height:1.8;color:var(--mid);font-weight:300;}
-.doctor-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;}
-.doctor-tag{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;background:var(--red-pale);color:var(--red);padding:6px 14px;border-radius:2px;}
+.doctor-card{
+  background:linear-gradient(135deg,var(--white) 0%,rgba(245,242,238,.5) 100%);
+  border:1.5px solid rgba(184,152,106,.2);
+  padding:0;
+  position:relative;
+  overflow:hidden;
+  transition:all .4s cubic-bezier(0.23,1,0.320,1);
+  border-radius:12px;
+  box-shadow:0 10px 40px rgba(0,0,0,.08);
+  display:flex;
+  flex-direction:column;
+}
+.doctor-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;
+  height:4px;
+  background:linear-gradient(to right,var(--red),var(--gold-light));
+  z-index:2;
+}
+.doctor-card::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(135deg,rgba(184,152,106,.05) 0%,transparent 100%);
+  opacity:0;
+  transition:opacity .4s;
+  z-index:1;
+}
+.doctor-card:hover{
+  box-shadow:0 24px 60px rgba(140,28,28,.16),0 8px 24px rgba(184,152,106,.12);
+  transform:translateY(-8px);
+  border-color:rgba(184,152,106,.35);
+}
+.doctor-card:hover::after{opacity:1;}
+.doctor-avatar{
+  width:100%;
+  height:280px;
+  border-radius:12px 12px 0 0;
+  background:linear-gradient(135deg,var(--cream) 0%,var(--off-white) 100%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:72px;
+  margin-bottom:0;
+  border:none;
+  overflow:hidden;
+  position:relative;
+  transition:transform .4s cubic-bezier(0.23,1,0.320,1);
+}
+.doctor-card:hover .doctor-avatar{
+  transform:scale(1.05);
+}
+.doctor-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:transform .4s ease;
+}
+.doctor-card:hover .doctor-avatar img{
+  transform:scale(1.08);
+}
+/* Premium shimmer effect */
+.doctor-avatar::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);
+  opacity:0;
+  transition:opacity .4s;
+  z-index:3;
+  pointer-events:none;
+}
+.doctor-card:hover .doctor-avatar::before{
+  opacity:1;
+  animation:shimmer 1.2s ease-in-out;
+}
+@keyframes shimmer{
+  0%{transform:translateX(-100%);}
+  100%{transform:translateX(100%);}
+}
+.doctor-info{
+  padding:40px 36px 44px;
+  position:relative;
+  z-index:2;
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+.doctor-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:28px;
+  font-weight:500;
+  color:var(--charcoal);
+  margin-bottom:12px;
+  background:linear-gradient(135deg,var(--charcoal),var(--red));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  position:relative;
+  padding-bottom:12px;
+}
+.doctor-name::after{
+  content:'';
+  position:absolute;
+  bottom:0;
+  left:0;
+  width:50%;
+  height:2px;
+  background:linear-gradient(to right,var(--red),var(--gold-light),transparent);
+  border-radius:1px;
+}
+.doctor-creds{
+  font-size:13px;
+  color:var(--red);
+  font-weight:600;
+  letter-spacing:.12em;
+  margin-bottom:12px;
+  text-transform:uppercase;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.doctor-creds::before{
+  content:'';
+  display:inline-block;
+  width:3px;
+  height:3px;
+  background:var(--gold-light);
+  border-radius:50%;
+}
+.doctor-reg{
+  font-size:10px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:16px;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.doctor-reg::before{
+  content:'🆔';
+  font-size:12px;
+}
+.doctor-bio{
+  font-size:14px;
+  line-height:1.8;
+  color:var(--mid);
+  font-weight:300;
+  margin-bottom:20px;
+  flex:1;
+  border-left:2px solid var(--gold);
+  padding-left:16px;
+}
+.doctor-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:0;
+  padding-top:16px;
+  border-top:1px solid rgba(184,152,106,.15);
+}
+.doctor-tag{
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:700;
+  background:linear-gradient(135deg,var(--red-pale) 0%,rgba(181,42,42,.05) 100%);
+  color:var(--red);
+  padding:7px 16px;
+  border-radius:20px;
+  border:1px solid rgba(140,28,28,.15);
+  transition:all .3s;
+  cursor:default;
+}
+.doctor-tag:hover{
+  background:linear-gradient(135deg,var(--red-pale) 0%,rgba(181,42,42,.12) 100%);
+  border-color:var(--red);
+  transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(140,28,28,.1);
+}
 
 /* ── MOVING IMAGE GALLERY ── */
 .image-gallery-section{padding:80px 0;background:var(--white);}
-.gallery-container{position:relative;overflow:hidden;border-radius:4px;height:400px;box-shadow:var(--shadow-lg);}
+.gallery-container{position:relative;overflow:hidden;border-radius:4px;height:380px;box-shadow:var(--shadow-lg);}
 .gallery-track{display:flex;gap:20px;animation:scroll-gallery 60s linear infinite;padding:0 20px;}
 .gallery-track:hover{animation-play-state:paused;}
-.gallery-item{flex:0 0 300px;height:400px;border-radius:4px;overflow:hidden;position:relative;box-shadow:0 2px 20px rgba(0,0,0,0.08);transition:transform .3s ease;}
+.gallery-item{flex:0 0 380px;height:380px;border-radius:4px;overflow:hidden;position:relative;box-shadow:0 2px 20px rgba(0,0,0,0.08);transition:transform .3s ease;}
 .gallery-item:hover{transform:scale(1.02);}
 .gallery-item img{width:100%;height:100%;object-fit:cover;}
-.gallery-item-placeholder{width:100%;height:100%;background:linear-gradient(135deg, var(--cream) 0%, var(--off-white) 100%);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--muted);border:2px dashed var(--border);}
+.gallery-item-placeholder{width:100%;height:100%;background:linear-gradient(135deg, var(--cream) 0%, var(--off-white) 100%);display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:'Jost',sans-serif;font-size:12px;color:var(--muted);border:2px dashed var(--border);padding:20px;text-align:center;gap:12px;}
 @keyframes scroll-gallery{
   0%{transform:translateX(0);}
-  100%{transform:translateX(-2160px);}
+  100%{transform:translateX(-2280px);}
 }
 
 /* ── MOBILE GALLERY RESPONSIVE ── */
 @media(max-width:1024px){
   .gallery-container{height:300px;}
-  .gallery-item{flex:0 0 240px;height:300px;}
+  .gallery-item{flex:0 0 300px;height:300px;}
   @keyframes scroll-gallery{
     0%{transform:translateX(0);}
-    100%{transform:translateX(-1680px);}
+    100%{transform:translateX(-1800px);}
   }
   .gallery-track{animation:scroll-gallery 50s linear infinite;}
 }
@@ -456,28 +610,28 @@ nav.scrolled{box-shadow:var(--shadow);}
 @media(max-width:768px){
   .image-gallery-section{padding:60px 0;}
   .gallery-container{height:250px;border-radius:8px;}
-  .gallery-item{flex:0 0 180px;height:250px;border-radius:8px;}
+  .gallery-item{flex:0 0 250px;height:250px;border-radius:8px;}
   .gallery-track{gap:16px;padding:0 16px;animation:scroll-gallery-md 45s linear infinite;}
   @keyframes scroll-gallery-md{
     0%{transform:translateX(0);}
-    100%{transform:translateX(-1260px);}
+    100%{transform:translateX(-1500px);}
   }
 }
 
 @media(max-width:480px){
   .image-gallery-section{padding:40px 0;}
   .gallery-container{height:200px;border-radius:6px;}
-  .gallery-item{flex:0 0 140px;height:200px;border-radius:6px;box-shadow:0 1px 12px rgba(0,0,0,0.06);}
+  .gallery-item{flex:0 0 200px;height:200px;border-radius:6px;box-shadow:0 1px 12px rgba(0,0,0,0.06);}
   .gallery-track{gap:12px;padding:0 12px;animation:scroll-gallery-sm 40s linear infinite;}
   @keyframes scroll-gallery-sm{
     0%{transform:translateX(0);}
-    100%{transform:translateX(-1020px);}
+    100%{transform:translateX(-1200px);}
   }
 }
 
 /* ── SERVICES ── */
 .services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
-.service-card{background:var(--white);border:1px solid var(--border);padding:40px 32px;transition:all .3s;cursor:default;position:relative;overflow:hidden;}
+.service-card{background:var(--white);border:1px solid var(--border);padding:40px 32px;transition:all .3s;cursor:pointer;position:relative;overflow:hidden;}
 .service-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:3px;background:var(--red);transform:scaleX(0);transform-origin:left;transition:transform .4s ease;}
 .service-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-4px);}
 .service-card:hover::after{transform:scaleX(1);}
@@ -637,6 +791,7 @@ footer{background:#111;color:rgba(255,255,255,.6);padding:64px 0 32px;}
   .services-grid{grid-template-columns:repeat(2,1fr);}
   .why-grid{grid-template-columns:repeat(2,1fr);}
   .doctors-grid{grid-template-columns:1fr;}
+  .doctor-avatar{height:240px;}
   .footer-grid{grid-template-columns:1fr 1fr;}
   .tools-intro{grid-template-columns:1fr;}
   .contact-grid{grid-template-columns:1fr;}
@@ -647,6 +802,10 @@ footer{background:#111;color:rgba(255,255,255,.6);padding:64px 0 32px;}
   .hamburger{display:flex;}
   .services-grid{grid-template-columns:1fr;}
   .why-grid{grid-template-columns:1fr 1fr;}
+  .doctor-avatar{height:200px;}
+  .doctor-info{padding:28px 24px 32px;}
+  .doctor-name{font-size:24px;}
+  .doctor-bio{font-size:13px;}
   .testi-grid{grid-template-columns:1fr;}
   .tool-panel{padding:28px 20px;}
   .two-col,.form-row{grid-template-columns:1fr;}
@@ -801,6 +960,130 @@ footer{background:#111;color:rgba(255,255,255,.6);padding:64px 0 32px;}
 .gallery-frame:hover::after{
   opacity:1;
 }
+
+/* ── SERVICE DETAIL MODAL ── */
+.service-modal-overlay {
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(10, 5, 5, 0.75);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.service-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.service-modal {
+  background: var(--white);
+  border: 1px solid var(--border);
+  max-width: 640px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 4px;
+  position: relative;
+  padding: 48px;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(24px);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.service-modal-overlay.active .service-modal {
+  transform: translateY(0);
+}
+.service-modal-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--muted);
+  transition: all 0.3s;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--off-white);
+  border: 1px solid var(--border);
+}
+.service-modal-close:hover {
+  color: var(--red);
+  transform: rotate(90deg);
+  background: var(--red-pale);
+  border-color: rgba(140,28,28,.2);
+}
+.service-modal-icon {
+  font-size: 48px;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+.service-modal-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 500;
+  color: var(--charcoal);
+  margin-bottom: 16px;
+}
+.service-modal-text {
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--mid);
+  font-weight: 300;
+  margin-bottom: 28px;
+}
+.service-modal-subtitle {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  margin-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 8px;
+}
+.service-modal-list {
+  list-style: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 36px;
+}
+@media(max-width: 480px) {
+  .service-modal-list {
+    grid-template-columns: 1fr;
+  }
+  .service-modal {
+    padding: 40px 24px 32px;
+  }
+}
+.service-modal-list li {
+  font-size: 14px;
+  color: var(--mid);
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.service-modal-list li::before {
+  content: '';
+  width: 6px;
+  height: 1.5px;
+  background: var(--red);
+  flex-shrink: 0;
+}
+.service-modal-ctas {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
 </style>
 </head>
 <body>
@@ -946,12 +1229,6 @@ footer{background:#111;color:rgba(255,255,255,.6);padding:64px 0 32px;}
     <div class="hero-caption-text" id="heroCaptionText"></div>
   </div>
 
-  <!-- Scroll indicator -->
-  <div class="hero-scroll">
-    <div class="scroll-line"></div>
-    <span>Scroll</span>
-  </div>
-
 </section>
 
 <!-- MARQUEE -->
@@ -983,91 +1260,91 @@ footer{background:#111;color:rgba(255,255,255,.6);padding:64px 0 32px;}
       <!-- Image 1 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/8c1c1c/ffffff?text=Clinic+1" alt="Clinic Image 1"/>
+          <img src="https://i.ibb.co/d02VG8bR/ad7aabc9a724.jpg" alt="Clinic Image 1"/>
         </div>
       </div>
       <!-- Image 2 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/b52a2a/ffffff?text=Clinic+2" alt="Clinic Image 2"/>
+          <img src="https://i.ibb.co/MDpQSY5q/8b5cd9f1c676.jpg" alt="Clinic Image 2"/>
         </div>
       </div>
       <!-- Image 3 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/8c1c1c/ffffff?text=Facility+3" alt="Clinic Image 3"/>
+          <img src="https://i.ibb.co/DP02Q6RM/61600b6c1f3e.jpg" alt="Clinic Image 3"/>
         </div>
       </div>
       <!-- Image 4 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/b52a2a/ffffff?text=Equipment+4" alt="Clinic Image 4"/>
+          <img src="https://i.ibb.co/JwqHVWby/989c0d1bfc4e.jpg" alt="Clinic Image 4"/>
         </div>
       </div>
       <!-- Image 5 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/8c1c1c/ffffff?text=Treatment+5" alt="Clinic Image 5"/>
+          <img src="https://i.ibb.co/G4B6sZZY/8e7f2a400f77.jpg" alt="Clinic Image 5"/>
         </div>
       </div>
       <!-- Image 6 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/b52a2a/ffffff?text=Surgery+6" alt="Clinic Image 6"/>
+          <img src="https://i.ibb.co/jZJTkMKg/52ef2d64c154.jpg" alt="Clinic Image 6"/>
         </div>
       </div>
       <!-- Image 7 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/8c1c1c/ffffff?text=Patient+Care+7" alt="Clinic Image 7"/>
+          <img src="https://i.ibb.co/HfDV78DQ/fa5f906e63d9.jpg" alt="Clinic Image 7"/>
         </div>
       </div>
       <!-- Image 8 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/b52a2a/ffffff?text=Clinic+View+8" alt="Clinic Image 8"/>
+          <img src="https://i.ibb.co/99Tz3DtM/c8ee6579a7e4.jpg" alt="Clinic Image 8"/>
         </div>
       </div>
       <!-- Image 9 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/8c1c1c/ffffff?text=Smile+Design+9" alt="Clinic Image 9"/>
+          <img src="https://i.ibb.co/4qnZYhP/921fbcf5f175.jpg" alt="Clinic Image 9"/>
         </div>
       </div>
       <!-- Image 10 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/b52a2a/ffffff?text=Implant+Lab+10" alt="Clinic Image 10"/>
+          <img src="https://i.ibb.co/ZRjMQSFD/4fbd4f966cac.jpg" alt="Clinic Image 10"/>
         </div>
       </div>
       <!-- Image 11 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/8c1c1c/ffffff?text=Interior+11" alt="Clinic Image 11"/>
+          <img src="https://via.placeholder.com/380x380/8c1c1c/ffffff?text=Image+11%0Ahttps://via.placeholder.com%0A/380x380/8c1c1c" alt="Clinic Image 11"/>
         </div>
       </div>
       <!-- Image 12 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/b52a2a/ffffff?text=Reception+12" alt="Clinic Image 12"/>
+          <img src="https://via.placeholder.com/380x380/b52a2a/ffffff?text=Image+12%0Ahttps://via.placeholder.com%0A/380x380/b52a2a" alt="Clinic Image 12"/>
         </div>
       </div>
       <!-- Image 13 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/8c1c1c/ffffff?text=Procedure+13" alt="Clinic Image 13"/>
+          <img src="https://via.placeholder.com/380x380/8c1c1c/ffffff?text=Image+13%0Ahttps://via.placeholder.com%0A/380x380/8c1c1c" alt="Clinic Image 13"/>
         </div>
       </div>
       <!-- Image 14 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/b52a2a/ffffff?text=Patient+14" alt="Clinic Image 14"/>
+          <img src="https://via.placeholder.com/380x380/b52a2a/ffffff?text=Image+14%0Ahttps://via.placeholder.com%0A/380x380/b52a2a" alt="Clinic Image 14"/>
         </div>
       </div>
       <!-- Image 15 -->
       <div class="gallery-item">
         <div class="gallery-item-placeholder">
-          <img src="https://via.placeholder.com/300x400/8c1c1c/ffffff?text=Specialist+15" alt="Clinic Image 15"/>
+          <img src="https://via.placeholder.com/380x380/8c1c1c/ffffff?text=Image+15%0Ahttps://via.placeholder.com%0A/380x380/8c1c1c" alt="Clinic Image 15"/>
         </div>
       </div>
     </div>
@@ -1085,29 +1362,37 @@ footer{background:#111;color:rgba(255,255,255,.6);padding:64px 0 32px;}
     </div>
     <div class="doctors-grid">
       <div class="doctor-card">
-        <div class="doctor-avatar">👨‍⚕️</div>
-        <div class="doctor-name">Dr. Bhargav Naik</div>
-        <div class="doctor-creds">BDS · MDS (Prosthodontist &amp; Implantologist)</div>
-        <div class="doctor-reg">Registration No. A-7160</div>
-        <p class="doctor-bio">Dr. Bhargav Naik is a dual-qualified specialist with advanced post-graduate training in Prosthodontics and Implantology. With over a decade of hands-on surgical experience, he has successfully placed hundreds of dental implants and crafted full smile restorations for patients across South Gujarat. His approach blends meticulous surgical precision with a keen aesthetic eye.</p>
-        <div class="doctor-tags">
-          <span class="doctor-tag">Implantology</span>
-          <span class="doctor-tag">Prosthodontics</span>
-          <span class="doctor-tag">Smile Design</span>
-          <span class="doctor-tag">Full Arch Rehab</span>
+        <div class="doctor-avatar">
+          <img src="https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?w=400&h=400&fit=crop" alt="Dr. Bhargav Naik - Prosthodontist & Implantologist"/>
+        </div>
+        <div class="doctor-info">
+          <div class="doctor-name">Dr. Bhargav Naik</div>
+          <div class="doctor-creds">BDS · MDS Prosthodontist</div>
+          <div class="doctor-reg">Registration No. A-7160</div>
+          <p class="doctor-bio">Dual-qualified specialist with advanced post-graduate training in Prosthodontics and Implantology. Over a decade of hands-on surgical experience placing hundreds of dental implants.</p>
+          <div class="doctor-tags">
+            <span class="doctor-tag">Implantology</span>
+            <span class="doctor-tag">Prosthodontics</span>
+            <span class="doctor-tag">Smile Design</span>
+            <span class="doctor-tag">Full Arch</span>
+          </div>
         </div>
       </div>
       <div class="doctor-card">
-        <div class="doctor-avatar">👩‍⚕️</div>
-        <div class="doctor-name">Dr. Juhi Naik</div>
-        <div class="doctor-creds">BDS · Dental Surgeon (I.C.C. Endodontics)</div>
-        <div class="doctor-reg">Registration No. A-11879</div>
-        <p class="doctor-bio">Dr. Juhi Naik is a skilled dental surgeon specialising in Endodontics with advanced ICC certification. Her precision in complex root canal therapies, retreatments, and internal tooth care has helped hundreds of patients save their natural teeth. Known for a gentle chairside manner, she is the practitioner our patients trust for anxiety-free, pain-free dental experiences.</p>
-        <div class="doctor-tags">
-          <span class="doctor-tag">Endodontics</span>
-          <span class="doctor-tag">Root Canal</span>
-          <span class="doctor-tag">ICC Certified</span>
-          <span class="doctor-tag">Tooth Preservation</span>
+        <div class="doctor-avatar">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop" alt="Dr. Juhi Naik - Endodontist"/>
+        </div>
+        <div class="doctor-info">
+          <div class="doctor-name">Dr. Juhi Naik</div>
+          <div class="doctor-creds">BDS · Dental Surgeon ICC</div>
+          <div class="doctor-reg">Registration No. A-11879</div>
+          <p class="doctor-bio">Skilled dental surgeon specialising in Endodontics with advanced ICC certification. Precision in complex root canal therapies and tooth preservation.</p>
+          <div class="doctor-tags">
+            <span class="doctor-tag">Endodontics</span>
+            <span class="doctor-tag">Root Canal</span>
+            <span class="doctor-tag">ICC Certified</span>
+            <span class="doctor-tag">Preservation</span>
+          </div>
         </div>
       </div>
     </div>
@@ -1761,6 +2046,24 @@ footer{background:#111;color:rgba(255,255,255,.6);padding:64px 0 32px;}
   </div>
 </footer>
 
+<!-- SERVICE DETAIL MODAL -->
+<div class="service-modal-overlay" id="serviceModalOverlay" onclick="handleServiceModalBackdropClick(event)">
+  <div class="service-modal">
+    <span class="service-modal-close" onclick="closeServiceModal()">✕</span>
+    <span class="service-modal-icon" id="modalServiceIcon">🔩</span>
+    <h3 class="service-modal-title" id="modalServiceTitle">Dental Implants</h3>
+    <p class="service-modal-text" id="modalServiceText">Service detail description goes here...</p>
+    <div class="service-modal-subtitle">Procedures &amp; Specialties</div>
+    <ul class="service-modal-list" id="modalServiceList">
+      <!-- Injected by JS -->
+    </ul>
+    <div class="service-modal-ctas">
+      <button class="btn-primary" onclick="closeServiceModal(); document.querySelector('#tools').scrollIntoView({behavior: 'smooth'});">Book Appointment ↗</button>
+      <a href="tel:+919033645212" class="btn-outline">Call Clinic</a>
+    </div>
+  </div>
+</div>
+
 <!-- FLOATING WHATSAPP -->
 <div class="wa-float">
   <div class="wa-tooltip">💬 Chat with us on WhatsApp</div>
@@ -2345,6 +2648,71 @@ document.querySelectorAll('a[href="#tools"]').forEach(link => {
       }
     }
   });
+});
+
+/* ════════════════════════════════════
+   SERVICES POPUP / DETAIL MODAL
+════════════════════════════════════ */
+const serviceDetails = {
+  "Dental Implants": {
+    text: "Dental implants are the gold standard for replacing missing teeth. They consist of a medical-grade titanium screw that acts as an artificial tooth root, which fuses with your jawbone through a natural process called osseointegration. Once healed, a custom-crafted ceramic or zirconia crown is securely attached, restoring 100% of your chewing capability and preventing natural bone loss. Under the expert care of Dr. Bhargav Naik (MDS Prosthodontics & Implantology), our clinic utilizes advanced digital guided surgery to ensure maximum precision, minimal discomfort, and faster healing times."
+  },
+  "Endodontics": {
+    text: "Endodontics is a specialized branch of dentistry focused on saving your natural teeth from infection and severe decay. Under the skilled hands of Dr. Juhi Naik (BDS, Dental Surgeon with ICC Endodontics certification), we perform painless root canal treatments (RCT) using state-of-the-art rotary endodontic motors, digital apex locators, and warm obturation systems. By removing infected pulp tissue, sanitizing the root canals, and sealing them hermetically, we alleviate tooth pain permanently while avoiding extraction. Retreatment of failing previous root canals is also offered with high success rates."
+  },
+  "Aesthetic Dentistry": {
+    text: "Aesthetic Dentistry combines dental science with artistic design to create your perfect, natural-looking smile. We design tailored smile makeovers using Digital Smile Design (DSD) to analyze your facial proportions before starting. Our cosmetic services include ultra-thin custom porcelain veneers (laminates), professional teeth whitening using clinical Zoom systems for immediate shade improvement, and composite bonding for minor tooth corrections. Each treatment is tailored to achieve harmonious shape, color, and alignment, giving you the confidence of a radiant smile."
+  },
+  "Prosthodontics": {
+    text: "Prosthodontics focuses on restoring your dentition's form, function, and aesthetics using advanced tooth-replacement techniques. Dr. Bhargav Naik, an MDS specialist in Prosthodontics, leads this division. We craft premium metal-free zirconia and CAD-CAM ceramic crowns, custom bridges, and lifelike dentures. For patients with complex oral conditions, worn teeth, or multiple missing teeth, we specialize in comprehensive Full Mouth Rehabilitation. Our clinic utilizes advanced dental impression techniques to ensure highly accurate restorations that fit perfectly and last for years."
+  },
+  "Preventive Care": {
+    text: "Preventive Care is the foundation of lifelong oral health. We focus on diagnosing and arresting dental issues in their earliest stages before they require complex treatments. Our preventive services include advanced ultrasonic scaling and polishing to remove plaque and tartar, deep periodontal therapy to treat early gum disease (gingivitis), and protective dental sealants for children and young adults to block cavities in deep tooth grooves. We also provide customized clinical fluoride applications to strengthen enamel and detailed dietary and oral hygiene counseling."
+  },
+  "Oral Surgery & More": {
+    text: "Oral Surgery at our clinic covers a broad spectrum of surgical procedures performed with microscopic precision and gentle techniques to ensure patient comfort. We specialize in pain-free impacted wisdom tooth extractions, bone grafting procedures (essential for implant prep in cases of bone loss), and minor oral surgeries. We also offer specialized pediatric dental care for children in a friendly, warm environment, and treat TMJ (jaw joint) disorders to resolve chronic jaw pain and clicking."
+  }
+};
+
+const serviceModalOverlay = document.getElementById('serviceModalOverlay');
+
+function openServiceModal(icon, title, desc, listHtml) {
+  document.getElementById('modalServiceIcon').textContent = icon;
+  document.getElementById('modalServiceTitle').textContent = title;
+  
+  const details = serviceDetails[title];
+  document.getElementById('modalServiceText').textContent = details ? details.text : desc;
+  document.getElementById('modalServiceList').innerHTML = listHtml;
+  
+  serviceModalOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeServiceModal() {
+  serviceModalOverlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+function handleServiceModalBackdropClick(e) {
+  if (e.target === serviceModalOverlay) {
+    closeServiceModal();
+  }
+}
+
+document.querySelectorAll('.service-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const icon = card.querySelector('.service-icon').textContent.trim();
+    const title = card.querySelector('.service-title').textContent.trim();
+    const desc = card.querySelector('.service-desc').textContent.trim();
+    const listHtml = card.querySelector('.service-list').innerHTML;
+    openServiceModal(icon, title, desc, listHtml);
+  });
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && serviceModalOverlay.classList.contains('active')) {
+    closeServiceModal();
+  }
 });
 </script>
 </body>
